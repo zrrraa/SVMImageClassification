@@ -219,3 +219,33 @@ plot_confusion_matrix(cm_normalized, title='Normalized confusion matrix')
 # show confusion matrix
 plt.savefig('matrix.png', format='png')
 plt.show()
+
+
+
+
+# test
+
+# 在test_photo中添加想要分类的图像
+image_paths = ["test_photo/100.jpg", "test_photo/400.jpg"]  # 添加您要分类的图像的路径
+
+XX_test = []
+for path in image_paths:
+    # 读取图像
+    image = cv2.imread(path)
+    
+    # 调整图像大小
+    img = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
+
+    # 计算直方图并将其存储在XX_test中
+    hist = cv2.calcHist([img], [0, 1], None, [256, 256], [0.0, 255.0, 0.0, 255.0])
+    XX_test.append(((hist / 255).flatten()))
+
+# 将XX_test转换为numpy数组
+XX_test = np.array(XX_test)
+
+# 对XX_test进行分类
+predictions_labels = clf.predict(XX_test)
+
+# 打印预测的标签
+print("预测的标签：")
+print(predictions_labels)
