@@ -21,11 +21,11 @@ X = []  # 定义图像名称
 Y = []  # 定义图像分类类标
 Z = []  # 定义图像像素
 # 记得更改此处4或者10
-for i in range(0, 10):
+for i in range(0, 4):
     # 遍历文件夹，读取图片
-    for f in os.listdir("photo2/%s" % i):
+    for f in os.listdir("photo3/%s" % i):
         # 获取图像名称
-        X.append("photo2//" + str(i) + "//" + str(f))
+        X.append("photo3//" + str(i) + "//" + str(f))
         # 获取图像类标即为文件夹名称
         Y.append(i)
 # print(X)
@@ -44,7 +44,7 @@ Y = np.array(Y)
 
 # 随机率为100% 选取其中的20%作为测试集
 X_train, X_test, y_train, y_test = train_test_split(X, Y,
-                                                    test_size=0.2, random_state=1)
+                                                    test_size=0.3, random_state=1)
 
 print(len(X_train), len(X_test), len(y_train), len(y_test))
 
@@ -141,8 +141,9 @@ print(classification_report(y_test, predictions_labels))
 # -*-coding:utf-8-*-
 
 # labels表示你不同类别的代号，比如这里的demo中有10个类别
-labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+# labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 # labels = ['条形缺陷', '未焊透', '未熔合', '圆形缺陷']
+labels = [0, 1, 2, 3]
 
 '''
 具体解释一下re_label.txt和pr_label.txt这两个文件，比如你有100个样本
@@ -194,6 +195,8 @@ def plot_confusion_matrix(cm, title='Confusion Matrix', cmap=plt.cm.binary):
     plt.xlabel('Predicted label')
 
 
+# 生成混淆矩阵的代码，不知道为什么报错了，被我注释掉了
+
 cm = confusion_matrix(y_true, y_pred)
 np.set_printoptions(precision=2)
 cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -223,11 +226,44 @@ plt.show()
 
 
 
-# test
+# # test1
 
-# 在test_photo中添加想要分类的图像
-image_paths = ["test_photo/100.jpg", "test_photo/400.jpg"]  # 添加您要分类的图像的路径
+# # 在test_photo中添加想要分类的图像
+# image_paths = ["test_photo/100.jpg", "test_photo/400.jpg"]  # 添加您要分类的图像的路径
 
+# XX_test = []
+# for path in image_paths:
+#     # 读取图像
+#     image = cv2.imread(path)
+    
+#     # 调整图像大小
+#     img = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
+
+#     # 计算直方图并将其存储在XX_test中
+#     hist = cv2.calcHist([img], [0, 1], None, [256, 256], [0.0, 255.0, 0.0, 255.0])
+#     XX_test.append(((hist / 255).flatten()))
+
+# # 将XX_test转换为numpy数组
+# XX_test = np.array(XX_test)
+
+# # 对XX_test进行分类
+# predictions_labels = clf.predict(XX_test)
+
+# # 打印预测的标签
+# print("预测的标签：")
+# print(predictions_labels)
+
+
+# test2
+
+# 遍历指定文件夹，获取所有图像文件的路径
+folder_path = "test_photo"  # 替换为实际的图像文件夹路径
+image_paths = []
+for filename in os.listdir(folder_path):
+    if filename.endswith(".jpg") or filename.endswith(".png"):
+        image_paths.append(os.path.join(folder_path, filename))
+
+# 加载图像并进行分类
 XX_test = []
 for path in image_paths:
     # 读取图像
